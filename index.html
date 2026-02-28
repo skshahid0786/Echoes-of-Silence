@@ -2,6 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+     <link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Echoes of Silence - Shahid's Artifice</title>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -54,7 +63,7 @@
 
         .message-her {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
+            font-size: 0.75rem;
             color: #cbd5e1;
             border-left: 1px solid #7f1d1d;
             padding-left: 1.5rem;
@@ -110,7 +119,7 @@
         <header class="py-12">
             <div class="mt-3 flex items-center">
                 <span class="status-dot"></span>
-                <span class="text-[9px] uppercase tracking-[0.3em] text-gray-600 font-bold">HeartBeat</span>
+                <span class="text-[9px] uppercase tracking-[0.3em] text-gray-600">HeartBeat</span>
             </div>
         </header>
 
@@ -151,8 +160,8 @@
         }
 
         async function getHerResponse(userText) {
-            const system = "You are the ghost of a crush. You are cold, hauntingly beautiful, and your words feel like winter. Respond with one short, devastatingly poetic sentence.";
-            const prompt = encodeURIComponent(`${system}\nUser: ${userText}`);
+            const system = "Act as a girl who just broke up with the user. Be cold, winter-bitter, and deep. Speak with frost, not feelings";
+            const prompt = encodeURIComponent(`${system}\nUser says: "${userText}"\nRespond with one short,cold and heartbroken`);
             try {
                 const res = await fetch(`https://text.pollinations.ai/${prompt}`);
                 return await res.text();
@@ -165,6 +174,7 @@
             const text = userInput.value.trim();
             if (!text) return;
 
+            // User Message
             const uDiv = document.createElement('div');
             uDiv.className = 'message self-end text-right text-[10px] text-gray-700 uppercase tracking-widest mb-10 opacity-60';
             uDiv.innerText = text;
@@ -173,11 +183,13 @@
             userInput.value = '';
             chatWindow.scrollTop = chatWindow.scrollHeight;
 
+            // Fetch Data
             const [imageUrl, reply] = await Promise.all([
                 fetchSadImage(),
                 getHerResponse(text)
             ]);
 
+            // Her Message
             const hDiv = document.createElement('div');
             hDiv.className = 'message message-her';
             
@@ -186,6 +198,8 @@
                 img.src = imageUrl;
                 img.className = 'visual-insert';
                 hDiv.appendChild(img);
+                
+                // Update Background
                 bgVisual.style.backgroundImage = `url('${imageUrl}')`;
             }
 
@@ -195,6 +209,7 @@
 
             chatWindow.appendChild(hDiv);
             
+            // Smooth scroll
             setTimeout(() => {
                 chatWindow.scrollTo({
                     top: chatWindow.scrollHeight,
